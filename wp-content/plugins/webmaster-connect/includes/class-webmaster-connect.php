@@ -150,10 +150,7 @@ class Webmaster_Connect {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Webmaster_Connect_Admin( $this->get_plugin_name(), $this->get_version() );
-
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-        $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
         $this->loader->add_action( 'init', $plugin_admin, 'link_checker_settings_page' );
 	}
 

@@ -7,7 +7,7 @@ if ( $_SERVER['HTTP_HOST'] == 'wblog.info' ) {
   /** MySQL database username */
   define('DB_USER', 'wblog');
   /** MySQL database password */
-  define('DB_PASSWORD', 'hnPgRSuu#YMC1X$');
+  define('DB_PASSWORD', 'SYt6RUO5VQTtsWg');
   /** MySQL hostname */
   define('DB_HOST', '138.201.194.169');
   /** Database Charset to use in creating database tables. */

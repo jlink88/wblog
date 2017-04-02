@@ -13,6 +13,8 @@
 
 class RelLinkChecker {
     private $rel_link_checker_options;
+    private $check_path;
+    private $stats;
 
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'rel_link_checker_add_plugin_page' ) );
@@ -33,11 +35,40 @@ class RelLinkChecker {
 
     public function rel_link_checker_create_admin_page() {
         $this->rel_link_checker_options = get_option( 'rel_link_checker_option_name' ); ?>
-
+        
         <div class="wrap">
             <h2>Link Checker</h2>
             <p>Link checker for streaming/download hosts</p>
-            <?php settings_errors(); ?>
+
+            <?php
+
+            if( isset($_GET['reset_check']) ){
+                $this->reset_check();
+            }
+
+            $status = $this->get_test_status();
+
+            if ( $status == 'completed' ) {
+                ?>
+                <span class='label label-info'>A test has been completed</span>
+                <form method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
+                    <input type="hidden" name="page" value="rel-link-checker">
+                    <input type="submit" name="reset_check" value="Reset Check">
+                </form>
+                <?php
+            } elseif ( $status == "running" ) {
+                echo "<span class='label label-info'>A test is running</span>";
+                ?>
+                <form method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
+                    <input type="hidden" name="page" value="rel-link-checker">
+                    <input type="submit" name="reset_check" value="Abort Check">
+                </form>
+                <?php
+            }
+
+            settings_errors();
+
+            ?>
 
             <form method="post" action="options.php">
                 <?php
@@ -157,7 +188,37 @@ class RelLinkChecker {
         );
     }
 
+    public function get_test_status(){
+        $this->check_path = get_home_path() . '/autocheck';
+        $stats = file_get_contents($this->check_path . '/stats/data.stats');
+        $stats = json_decode($stats,true);
+        return $stats['status'];
+    }
+
+    public function reset_check(){
+        $status = $this->get_test_status();
+        //TODO: Kill php process that is running our check
+        $stats = ["dir" => "autocheck/stats/","files" => ["data.stats","deleted.txt","invalid.txt",'otherhosts.txt']];
+        if ( $status == 'completed' ) {
+            foreach ($stats["files"] as $file) {
+                $path = get_home_path() . $stats["dir"] . $file;
+                if (file_exists($path)){
+                    unlink($path);
+                }
+            }
+        }
+        unlink($this->check_path . '/last_links.txt');
+    }
+
+    /**
+     * Deletes the files generated after a check has been completed
+     */
+    public function clean_check(){
+
+    }
+
 }
+
 if ( is_admin() )
     $rel_link_checker = new RelLinkChecker();
 
