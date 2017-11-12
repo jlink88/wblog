@@ -44,7 +44,11 @@ define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '/app');
 define('WP_HOME', 'http://' . $_SERVER['SERVER_NAME']);
 define('WP_CONTENT_DIR', $_SERVER['DOCUMENT_ROOT'] . '/wp-content');
 define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '/wp-content');
-$_SERVER['HTTPS'] = 'on';
+
+if ($_SERVER['HTTP_HOST'] != 'wblog.local') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 
 $myDevStatus = 0;
 

@@ -34,7 +34,9 @@ class RelLinkChecker {
     }
 
     public function rel_link_checker_create_admin_page() {
-        $this->rel_link_checker_options = get_option( 'rel_link_checker_option_name' ); ?>
+        $this->rel_link_checker_options = get_option( 'rel_link_checker_option_name' );
+        var_dump($this->rel_link_checker_options);
+        ?>
         
         <div class="wrap">
             <h2>Link Checker</h2>

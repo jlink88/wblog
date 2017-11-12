@@ -217,3 +217,9 @@ pip-log.txt
 
 #Other
 .idea/
+
+#############
+## Custom
+#############
+
+wp-content/w3tc-config/
